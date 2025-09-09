@@ -1,0 +1,217 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "mount_file_id": "1XAjTyHq_v6v7DSA7eyY342PZYZDD8bMr",
+      "authorship_tag": "ABX9TyO/AgFmv0lAyzfdoNmMg0+a",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/tmdcks1103/Machine-Learning-Programming/blob/main/2%EC%A3%BC%EC%B0%A8\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 7,
+      "metadata": {
+        "id": "CVQhkMnpN8wg",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "1d737b0b-30c3-483b-f6de-4c9b3fa1b6bb"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "=== Test Accuracy ===\n",
+            "Decision Tree : 0.9333\n",
+            "Random Forest : 0.9000\n",
+            "Logistic Reg. : 0.9667\n"
+          ]
+        }
+      ],
+      "source": [
+        "import pandas as pd\n",
+        "\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "\n",
+        "from sklearn.tree import DecisionTreeClassifier\n",
+        "\n",
+        "from sklearn.ensemble import RandomForestClassifier\n",
+        "\n",
+        "from sklearn.linear_model import LogisticRegression\n",
+        "\n",
+        "from sklearn.metrics import accuracy_score\n",
+        "\n",
+        "\n",
+        "\n",
+        "# -----------------------------\n",
+        "\n",
+        "# 1) 데이터 준비\n",
+        "\n",
+        "# -----------------------------\n",
+        "\n",
+        "cols = [\"sepal_length\", \"sepal_width\", \"petal_length\", \"petal_width\", \"label\"]\n",
+        "\n",
+        "df = pd.read_csv(\"/content/drive/MyDrive/ColabNotebooks/data/iris.data\", header=None, names=cols).dropna()\n",
+        "\n",
+        "\n",
+        "\n",
+        "X = df.drop(columns=[\"label\"])\n",
+        "\n",
+        "y = df[\"label\"]\n",
+        "\n",
+        "\n",
+        "\n",
+        "X_train, X_test, y_train, y_test = train_test_split(\n",
+        "\n",
+        "    X, y, test_size=0.2, stratify=y, random_state=42\n",
+        "\n",
+        ")\n",
+        "\n",
+        "\n",
+        "\n",
+        "# -----------------------------\n",
+        "\n",
+        "# 2) 모델 구성\n",
+        "\n",
+        "# -----------------------------\n",
+        "\n",
+        "dt = DecisionTreeClassifier(random_state=42)\n",
+        "\n",
+        "rf = RandomForestClassifier(n_estimators=200, random_state=42)\n",
+        "\n",
+        "lr = LogisticRegression(max_iter=500)\n",
+        "\n",
+        "\n",
+        "\n",
+        "# -----------------------------\n",
+        "\n",
+        "# 3) 모델 학습\n",
+        "\n",
+        "# -----------------------------\n",
+        "\n",
+        "dt.fit(X_train, y_train)\n",
+        "\n",
+        "rf.fit(X_train, y_train)\n",
+        "\n",
+        "lr.fit(X_train, y_train)\n",
+        "\n",
+        "\n",
+        "\n",
+        "# -----------------------------\n",
+        "\n",
+        "# 4) 모델 평가\n",
+        "\n",
+        "# -----------------------------\n",
+        "\n",
+        "dt_acc = accuracy_score(y_test, dt.predict(X_test))\n",
+        "\n",
+        "rf_acc = accuracy_score(y_test, rf.predict(X_test))\n",
+        "\n",
+        "lr_acc = accuracy_score(y_test, lr.predict(X_test))\n",
+        "\n",
+        "\n",
+        "\n",
+        "print(\"=== Test Accuracy ===\")\n",
+        "\n",
+        "print(f\"Decision Tree : {dt_acc:.4f}\")\n",
+        "\n",
+        "print(f\"Random Forest : {rf_acc:.4f}\")\n",
+        "\n",
+        "print(f\"Logistic Reg. : {lr_acc:.4f}\")\n",
+        "\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "from sklearn.tree import DecisionTreeClassifier\n",
+        "from sklearn.ensemble import RandomForestClassifier\n",
+        "from sklearn.linear_model import LogisticRegression\n",
+        "from sklearn.metrics import accuracy_score\n",
+        "\n",
+        "# -----------------------------\n",
+        "# 1) 데이터 준비\n",
+        "# -----------------------------\n",
+        "# 헤더를 사용하여 데이터 파일을 올바르게 불러옵니다.\n",
+        "df = pd.read_csv(\"/content/drive/MyDrive/ColabNotebooks/data/diabetes.csv\")\n",
+        "\n",
+        "# 입력 데이터(X)와 레이블(y)을 올바르게 정의합니다.\n",
+        "X = df.drop(columns=[\"Outcome\"])\n",
+        "y = df[\"Outcome\"]\n",
+        "\n",
+        "X_train, X_test, y_train, y_test = train_test_split(\n",
+        "    X, y, test_size=0.2, stratify=y, random_state=42\n",
+        ")\n",
+        "\n",
+        "# -----------------------------\n",
+        "# 2) 모델 구성\n",
+        "# -----------------------------\n",
+        "dt = DecisionTreeClassifier(random_state=42)\n",
+        "rf = RandomForestClassifier(n_estimators=200, random_state=42)\n",
+        "lr = LogisticRegression(max_iter=500)\n",
+        "\n",
+        "# -----------------------------\n",
+        "# 3) 모델 학습\n",
+        "# -----------------------------\n",
+        "dt.fit(X_train, y_train)\n",
+        "rf.fit(X_train, y_train)\n",
+        "lr.fit(X_train, y_train)\n",
+        "\n",
+        "# -----------------------------\n",
+        "# 4) 모델 평가\n",
+        "# -----------------------------\n",
+        "dt_acc = accuracy_score(y_test, dt.predict(X_test))\n",
+        "rf_acc = accuracy_score(y_test, rf.predict(X_test))\n",
+        "lr_acc = accuracy_score(y_test, lr.predict(X_test))\n",
+        "\n",
+        "print(\"=== Test Accuracy ===\")\n",
+        "print(f\"Decision Tree : {dt_acc:.4f}\")\n",
+        "print(f\"Random Forest : {rf_acc:.4f}\")\n",
+        "print(f\"Logistic Reg. : {lr_acc:.4f}\")"
+      ],
+      "metadata": {
+        "id": "bDVo7_VWBzat",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "51c0bc1d-6033-49fb-b8ee-d895453fd332"
+      },
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "=== Test Accuracy ===\n",
+            "Decision Tree : 0.7273\n",
+            "Random Forest : 0.7468\n",
+            "Logistic Reg. : 0.7143\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
